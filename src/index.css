@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+p {
+  font-size: 14px;
+}
+
+span {
+  display: inline-block;
+  font-size: 13px
+}
+
+input::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type = "range"]::-webkit-slider-thumb ,input[type = "range"]::-ms-thumb,input[type = "range"]::-moz-range-thumb  {
+  width: 100px;
+}
+
+:root {
+  --primary-color: #f6f6f6;
+  --secondary-color: #fafafa;
+  --title-color: #37383a;
+  --light-title-color: #5b5d5e;
+  --lighter-text-color: #888a8b;
+  --border-color: #abacad42;
+  --third-color: #f0f0f0;
+}
+
+body.dark {
+  --primary-color: #1d2631;
+  --secondary-color: #212a35;
+  --title-color: #d7dade;
+  --light-title-color: #b0b4ba;
+  --lighter-text-color: #636a72;
+  --border-color: #636a7248;
+  --third-color: #262f39;
+
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--primary-color);
+  font-family: 'Barlow', sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  /* -webkit-border-radius: 10px; */
+  /* border-radius: 10px; */
+  background: #1976d2;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1c61a7;
+}
+
+@keyframes lyric-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes lyric-down {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
