@@ -10,6 +10,7 @@ module.exports = {
 				light_title_color: "var(--light-title-color)",
 				lighter_text_color: "var(--lighter-text-color)",
 				border_color: "var(--border-color)",
+				active: "var(--active-song)",
 			},
 			backgroundColor: {
 				primary: "var(--primary-color)",
@@ -19,6 +20,7 @@ module.exports = {
 				lighter_text_color: "var(--lighter-text-color)",
 				border_color: "var(--border-color)",
 				third: "var(--third-color)",
+				active: "var(--active-song)",
 			},
 		},
 		boxShadow: {

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getHomePlayList } from "../api/home";
-import { getCharthome } from "../api/zingchart";
-import LazyLoad from "react-lazy-load";
-import { getSearch } from "../api/search";
+// import { getCharthome } from "../api/zingchart";
+// import { getSearch } from "../api/search";
 import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -11,8 +10,8 @@ import { Skeleton } from "@mui/material";
 const HomePage: React.FC = () => {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [homeDetails, setHomeDetails] = useState<any>();
-	const [chartDetails, setChartDetails] = useState<any>();
-	const [searchList, setSearchList] = useState<any>();
+	// const [chartDetails, setChartDetails] = useState<any>();
+	// const [searchList, setSearchList] = useState<any>();
 
 	const navigate = useNavigate();
 
@@ -33,8 +32,8 @@ const HomePage: React.FC = () => {
 	}, []);
 
 	console.log(homeDetails);
-	console.log(chartDetails);
-	console.log(searchList);
+	// console.log(chartDetails);
+	// console.log(searchList);
 
 	const HomePageElement: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
 		console.log(isLoading);
@@ -84,7 +83,7 @@ const HomePage: React.FC = () => {
 												<p className="line-clamp-2 text-lighter_text_color">{item.sortDescription}</p>
 											</div>
 										) : (
-											<div className="w-[calc((100%_-_64px)/5)] aspect-square">
+											<div key={index} className="w-[calc((100%_-_64px)/5)] aspect-square">
 												<Skeleton variant="rectangular" width="100%" height="100%" />
 											</div>
 										);

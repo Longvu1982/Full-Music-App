@@ -3,7 +3,8 @@ import { Thumbnail } from "./subPlayer/Thumbnail";
 import Controls from "./subPlayer/Index";
 import { getSong, getInfoSong } from "../../api/song";
 import { useAppDispatch } from "../../hooks/redux";
-import { setDuration, setInfoSongPlayer, setSrcAudio } from "../../redux/features/audioSlice";
+import { setDuration, setInfoSongPlayer, setSongId, setSrcAudio } from "../../redux/features/audioSlice";
+import { getCharthome } from "../../api/zingchart";
 
 const Player: React.FC = () => {
 
@@ -12,11 +13,19 @@ const Player: React.FC = () => {
 	// get song details
 	useEffect(() => {
 		const fetchSong = async () => {
-			const song = await getSong("Z6WZ0CZE");
-			const infoSong = await getInfoSong("Z6WZ0CZE");
-			// console.log("infoSong :", infoSong);
+			// get top songs
+			const chartHome: any = (await getCharthome())
+			const chartHomeNew = chartHome?.newRelease
+
+			// get the first song ID
+			const defaultSongId = chartHomeNew[0]?.encodeId
+
+			// get song base on ID
+			const song = await getSong(defaultSongId);
+			const infoSong = await getInfoSong(defaultSongId);
 
 			// save to redux
+			dispatch(setSongId(defaultSongId))
 			dispatch(setSrcAudio(song[128]));
 			dispatch(
 				setInfoSongPlayer({
@@ -27,6 +36,8 @@ const Player: React.FC = () => {
 				})
 			);
 			dispatch(setDuration(infoSong.duration))
+
+			// SetCurrentSong(song, infoSong)
 		};
 		fetchSong();
 	}, [dispatch]);

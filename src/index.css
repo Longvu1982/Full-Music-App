@@ -38,6 +38,7 @@ input[type = "range"]::-webkit-slider-thumb ,input[type = "range"]::-ms-thumb,in
   --lighter-text-color: #888a8b;
   --border-color: #abacad42;
   --third-color: #f0f0f0;
+  --active-song: #e0e0e0;
 }
 
 body.dark {
@@ -48,6 +49,8 @@ body.dark {
   --lighter-text-color: #636a72;
   --border-color: #636a7248;
   --third-color: #262f39;
+  --active-song: #2f3944;
+
 
 }
 
