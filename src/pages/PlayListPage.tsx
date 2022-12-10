@@ -9,148 +9,242 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { formatTime } from "../utils/formatTime";
 import secondsToHms from "../utils/formatTimeToHour";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import {
-  changeIconPlay,
-  setDuration,
-  setInfoSongPlayer,
-  setSongId,
-  setSrcAudio,
-} from "../redux/features/audioSlice";
+import { changeIconPlay, setDuration, setInfoSongPlayer, setSongId, setSrcAudio } from "../redux/features/audioSlice";
 import { getInfoSong, getSong } from "../api/song";
+import { Alert, Skeleton, Snackbar } from "@mui/material";
 
 const PlayListPage: React.FC = () => {
-  const { playListId } = useParams();
-  const [playLists, setPlayList] = useState<any>();
+	const { playListId } = useParams();
+	const [playLists, setPlayList] = useState<any>();
+	const [isLoading, setLoading] = useState<boolean>(true);
+	const [isOpenToast, setOpenToast] = useState<boolean>(false);
 
-  const songId = useAppSelector((state) => state.audio.songId);
-  const dispatch = useAppDispatch();
+	const songId = useAppSelector((state) => state.audio.songId);
+	const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchPlayList = async () => {
-      const getPlayList = await getDetailPlaylist(playListId as string);
-      setPlayList(getPlayList);
-    };
-    fetchPlayList();
-  }, [playListId]);
+	useEffect(() => {
+		const fetchPlayList = async () => {
+			const getPlayList = await getDetailPlaylist(playListId as string);
+			setPlayList(getPlayList);
+			setLoading(false);
+		};
+		fetchPlayList();
+	}, [playListId]);
 
-  console.log(playLists);
+	console.log(playLists);
 
-  const handleClickSong = async (encodeId: string) => {
-	console.log(encodeId + " " + songId)
-    if (encodeId !== songId) {
-      const song = await getSong(encodeId);
-      const infoSong = await getInfoSong(encodeId);
-      console.log("infoSong :", infoSong);
+	const handleClickSong = async (encodeId: string, streamingStatus: number) => {
+		// console.log(encodeId + " " + songId);
+		if (streamingStatus === 2) {
+			setOpenToast(true);
+			return;
+		} else if (streamingStatus === 1) {
+			if (encodeId !== songId) {
+				const song = await getSong(encodeId);
+				const infoSong = await getInfoSong(encodeId);
+				console.log("infoSong :", infoSong);
 
-      // save to redux
-	  dispatch(setSongId(encodeId))
-      dispatch(setSrcAudio(song[128]));
-      dispatch(
-        setInfoSongPlayer({
-          title: infoSong.title,
-          thumbnail: infoSong.thumbnailM,
-          artistsNames: infoSong.artistsNames,
-          artists: infoSong.artists,
-        })
-      );
-      dispatch(setDuration(infoSong.duration));
+				// save to redux
+				dispatch(setSongId(encodeId));
+				dispatch(setSrcAudio(song?.[128]));
+				dispatch(
+					setInfoSongPlayer({
+						title: infoSong.title,
+						thumbnail: infoSong.thumbnailM,
+						artistsNames: infoSong.artistsNames,
+						artists: infoSong.artists,
+					})
+				);
+				dispatch(setDuration(infoSong.duration));
 
-      // SetCurrentSong(song, infoSong)
-      dispatch(changeIconPlay(true));
-    }
-  };
+				// SetCurrentSong(song, infoSong)
+				dispatch(changeIconPlay(true));
+			}
+		}
+	};
+	console.log(playLists?.thumbnailM);
 
-  return (
-    <div className="flex gap-10">
-      {/* thumbnail section */}
-      <div className="w-96 h-auto shink-0 grow-0">
-        <div className="w-full aspect-square rounded-lg overflow-hidden">
-          <LazyLoadImage src={playLists?.thumbnailM} />
-        </div>
-        <h1 className="line-clamp-2 mt-3 text-center text-2xl font-semibold text-title_color">
-          {playLists?.title}
-        </h1>
-        <p className="pt-1 text-center text-light_title_color">{`Ngày phát hành: ${playLists?.releaseDate}`}</p>
-        <p className="pt-1 px-4 line-clamp-1 text-center text-light_title_color">
-          {playLists?.artistsNames}
-        </p>
-        <p className="pt-1 px-4 line-clamp-1 text-center text-light_title_color">{`${Math.round(
-          playLists?.like / 1000
-        )}K người thích`}</p>
-      </div>
+	const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === "clickaway") {
+			return;
+		}
 
-      {/* song lists section */}
-      <div className="w-full">
-        {/* description */}
-        <div className="text-title_color text-base font-medium">
-          <span className="pr-2 mr-2 font-medium border-r-[0.5px] border-r-border_color text-base text-lighter_text_color">
-            Lời tựa
-          </span>
-          {playLists?.sortDescription}
-        </div>
+		setOpenToast(false);
+	};
 
-        {/* table header */}
-        <div className="mt-3 w-full h-16 flex text-lighter_text_color text-base font-semibold border-b-[0.5px] border-b-border_color px-2">
-          <div className=" flex items-center w-[50%] shrink-0 grow-0">
-            <FontAwesomeIcon icon={faAward} />
-            <p className="ml-4">BÀI HÁT</p>
-          </div>
-          <div className=" flex items-center w-[35%] shrink-0 grow-0 ">
-            <p>ALBUM</p>
-          </div>
-          <div className="flex items-center w-[15%] shrink-0 grow-0 ">
-            <p className="w-full text-right">THỜI GIAN</p>
-          </div>
-        </div>
+	const ArtistsSection: React.FC = () => {
+		return (
+			<div className="my-20">
+				<h1 className="text-title_color text-2xl font-semibold mb-10">Nghệ Sĩ Tham Gia</h1>
+				<div className="flex gap-6">
+					{playLists?.artists?.map((artistItem: any, artistIndex: number) => {
+						return (
+							<>
+								<div className="flex flex-col w-[calc((100%-96px)/5)] max-w-[240px] shrink-0 grow-0">
+									<img
+										className="w-full rounded-full hover:brightness-[1.3] transition-all cursor-pointer"
+										src={artistItem?.thumbnailM}
+										alt=""
+									/>
+									<h1 className="font-semibold mt-3 text-light_title_color text-center">{artistItem?.name}</h1>
+									<p className="text-center text-lighter_text_color">
+										{Math.round(artistItem?.totalFollow / 1000)}K quan tâm
+									</p>
+								</div>
+							</>
+						);
+					})}
+				</div>
+			</div>
+		);
+	};
 
-        {/* render song lists */}
-        <div className="max-h-[calc(100vh_-_320px)]  mb-8 overflow-y-auto shadow-insetContainer">
-          {playLists?.song?.items?.map((item: any, index: number) => {
-            return (
-              <div
-                onClick={() => handleClickSong(item?.encodeId)}
-                key={index}
-                className={`w-full ${item?.encodeId === songId ? "bg-active" : ""} cursor-pointer hover:bg-third h-16 flex text-lighter_text_color text-base font-semibold border-b-[0.5px] border-b-border_color px-2`}
-              >
-                <div className="flex items-center w-[50%] shrink-0 grow-0 pr-4">
-                  <FontAwesomeIcon className="mr-4" size="xs" icon={faMusic} />
-                  <div>
-                    <LazyLoadImage
-                      effect="blur"
-                      className="rounded-md shrink-0 grow-0"
-                      width={45}
-                      height={45}
-                      src={item?.thumbnail}
-                    />
-                  </div>
-                  <div className="ml-3 flex flex-col">
-                    <h1 className="line-clamp-1 text-light_title_color">
-                      {item?.title}
-                    </h1>
-                    <p className="font-medium">{item?.artistsNames}</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[35%] shrink-0 grow-0">
-                  <p className="line-clamp-1 font-medium">{item?.album?.title}</p>
-                </div>
-                <div className="flex items-center w-[15%] shrink-0 grow-0 pr-3">
-                  <p className="font-medium w-full text-right">
-                    {formatTime(item?.duration)}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+	const ToastComponent: React.FC = () => {
+		return (
+			<Snackbar
+				anchorOrigin={{ vertical: "top", horizontal: "center" }}
+				open={isOpenToast}
+				onClose={handleClose}
+				autoHideDuration={2000}
+			>
+				<Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+					Bài hát chỉ dành cho tài khoản VIP !
+				</Alert>
+			</Snackbar>
+		);
+	};
+	return (
+		<>
+			<div className="flex gap-10">
+				{/* thumbnail section */}
+				<div className="cursor-pointer w-96 h-auto shink-0 grow-0">
+					<div className="w-full group aspect-square rounded-lg overflow-hidden">
+						{isLoading ? (
+							<Skeleton variant="rectangular" width="100%" height="100%" />
+						) : (
+							<img className="group-hover:scale-110 transition-all" alt="" src={playLists?.thumbnailM} />
+						)}
+					</div>
+					{isLoading ? (
+						<Skeleton sx={{ margin: "15px auto" }} width={200} height={40} variant="rectangular" />
+					) : (
+						<>
+							<h1 className="line-clamp-2 mt-3 text-center text-2xl font-semibold text-title_color">
+								{playLists?.title}
+							</h1>
+							<p className="pt-1 text-center text-light_title_color">{`Ngày phát hành: ${playLists?.releaseDate}`}</p>
+							<p className="pt-1 px-4 line-clamp-1 text-center text-light_title_color">{playLists?.artistsNames}</p>
+							<p className="pt-1 px-4 line-clamp-1 text-center text-light_title_color">{`${Math.round(
+								playLists?.like / 1000
+							)}K người thích`}</p>
+						</>
+					)}
+				</div>
 
-        {/* footer details */}
-        <span className="w-auto pr-2 border-r-[0.5px] border-r-border_color text-sm text-light_title_color">{`${playLists?.song?.total} bài hát`}</span>
-        <span className="pl-2 text-sm text-light_title_color">
-          {secondsToHms(playLists?.song?.totalDuration)}
-        </span>
-      </div>
-    </div>
-  );
+				{/* song lists section */}
+				<div className="w-full">
+					{/* description */}
+					<div className="text-title_color text-base font-medium">
+						<span className="pr-2 mr-2 font-medium border-r-[0.5px] border-r-border_color text-base text-lighter_text_color">
+							Lời tựa
+						</span>
+						{playLists?.sortDescription}
+					</div>
+
+					{/* table header */}
+					<div className="mt-3 w-full h-16 flex text-lighter_text_color text-base font-semibold border-b-[0.5px] border-b-border_color px-2">
+						<div className=" flex items-center w-[50%] shrink-0 grow-0">
+							<FontAwesomeIcon icon={faAward} />
+							<p className="ml-4">BÀI HÁT</p>
+						</div>
+						<div className=" flex items-center w-[35%] shrink-0 grow-0 ">
+							<p>ALBUM</p>
+						</div>
+						<div className="flex items-center w-[15%] shrink-0 grow-0 ">
+							<p className="w-full text-right">THỜI GIAN</p>
+						</div>
+					</div>
+
+					{/* render song lists */}
+					<div className="max-h-[calc(100vh_-_320px)]  mb-8 overflow-y-auto shadow-insetContainer">
+						{(isLoading ? Array.from(new Array(20)) : playLists?.song?.items).map((item: any, index: number) => {
+							return (
+								<div
+									onClick={() => handleClickSong(item?.encodeId, item?.streamingStatus)}
+									key={index}
+									className={`w-full ${
+										item?.encodeId === songId ? "bg-active" : ""
+									} cursor-pointer hover:bg-third h-16 flex text-lighter_text_color text-base font-semibold border-b-[0.5px] border-b-border_color px-2`}
+								>
+									<div className="flex items-center w-[50%] shrink-0 grow-0 pr-4">
+										<FontAwesomeIcon className="mr-4" size="xs" icon={faMusic} />
+										<div className="relative h-[45px] w-[45px]">
+											{!item ? (
+												<Skeleton width={45} variant="rectangular" height={45} />
+											) : (
+												<LazyLoadImage
+													effect="blur"
+													className="rounded-md shrink-0 grow-0"
+													width={45}
+													height={45}
+													src={item?.thumbnail}
+												/>
+											)}
+											{item?.streamingStatus === 2 && (
+												<span className="text-gray-600 absolute tracking-widest right-0 top-0 -translate-y-1/2 translate-x-2 bg-[#f4e570] text-[10px] leading-3 py-[2px] px-1 rounded-sm">
+													VIP
+												</span>
+											)}
+										</div>
+										<div className="ml-3 h-[48px] justify-between flex flex-col w-full">
+											{!item ? (
+												<Skeleton variant="rectangular" width={150} height={30} />
+											) : (
+												<>
+													<div className="w-full flex items-center relative line-clamp-1 text-light_title_color">
+														{item?.title}
+													</div>
+													<p className="line-clamp-1 font-medium">{item?.artistsNames}</p>
+												</>
+											)}
+										</div>
+									</div>
+									<div className="flex items-center w-[35%] shrink-0 grow-0">
+										{!item ? (
+											<Skeleton variant="rectangular" width={150} height={30} />
+										) : (
+											<p className="line-clamp-1 font-medium">{item?.album?.title}</p>
+										)}
+									</div>
+									<div className="flex justify-end items-center w-[15%] shrink-0 grow-0 pr-3">
+										{!item ? (
+											<Skeleton variant="rectangular" width="60%" height={30} />
+										) : (
+											<p className="font-medium w-full text-right">{formatTime(item?.duration)}</p>
+										)}
+									</div>
+								</div>
+							);
+						})}
+					</div>
+
+					{/* footer details */}
+					{isLoading ? (
+						<></>
+					) : (
+						<>
+							<span className="w-auto pr-2 border-r-[0.5px] border-r-border_color text-sm text-light_title_color">{`${playLists?.song?.total} bài hát`}</span>
+							<span className="pl-2 text-sm text-light_title_color">
+								{secondsToHms(playLists?.song?.totalDuration)}
+							</span>
+						</>
+					)}
+				</div>
+			</div>
+			<ArtistsSection />
+			<ToastComponent />
+		</>
+	);
 };
 
 export default PlayListPage;

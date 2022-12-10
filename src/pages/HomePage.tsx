@@ -3,7 +3,6 @@ import { getHomePlayList } from "../api/home";
 // import { getCharthome } from "../api/zingchart";
 // import { getSearch } from "../api/search";
 import { useNavigate } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Skeleton } from "@mui/material";
 
@@ -64,14 +63,14 @@ const HomePage: React.FC = () => {
 												className="relative cursor-pointer group w-[calc((100%_-_64px)/5)]"
 											>
 												<div className="rounded-md w-full aspect-square">
-													<LazyLoadImage
+													<img
 														className="max-w-none w-full group-hover:blur-md transition-all"
 														src={item.thumbnail}
 														alt=""
 													/>
 												</div>
 												<div className="absolute top-0 left-0 rounded-md w-full aspect-square overflow-hidden">
-													<LazyLoadImage
+													<img
 														className="max-w-none w-full group-hover:scale-110 transition-all"
 														src={item.thumbnailM}
 														alt=""
