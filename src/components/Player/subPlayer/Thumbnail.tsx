@@ -1,6 +1,8 @@
 import React from "react";
 import { useAppSelector } from "../../../hooks/redux";
 import Skeleton from "@mui/material/Skeleton";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const Thumbnail: React.FC = () => {
 	const infoSong = useAppSelector((state) => state.audio.infoSongPlayer);
@@ -11,7 +13,7 @@ export const Thumbnail: React.FC = () => {
 				{!infoSong ? (
 					<Skeleton variant="rectangular" width={272} height={272} />
 				) : (
-					<img className=" max-w-none w-full h-full object-cover object-center" src={infoSong?.thumbnail} alt="" />
+					<LazyLoadImage effect="blur" className=" max-w-none w-full h-full object-cover object-center" src={infoSong?.thumbnail} alt="" />
 				)}
 			</div>
 			<h1 className="text-left text-sm font-bold mt-3 mb-1">{infoSong?.title}</h1>

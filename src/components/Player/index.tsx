@@ -3,51 +3,65 @@ import { Thumbnail } from "./subPlayer/Thumbnail";
 import Controls from "./subPlayer/Index";
 import { getSong, getInfoSong } from "../../api/song";
 import { useAppDispatch } from "../../hooks/redux";
-import { setDuration, setInfoSongPlayer, setSongId, setSrcAudio } from "../../redux/features/audioSlice";
-import { getCharthome } from "../../api/zingchart";
+import { useSetCurrentSong } from "../../utils/SetCurrentSong";
+import { getHomePlayList } from "../../api/home";
+import { getDetailPlaylist } from "../../api/detailPlaylist";
+import { setCurrnetIndexPlaylist, setPlaylistSong, setSongId } from "../../redux/features/audioSlice";
 
 const Player: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const setCurrentSong = useSetCurrentSong();
+  
+  // get song details
+  useEffect(() => {
+    const fetchSong = async () => {
+      // get today songs
+      const gethomeDetails: any = await getHomePlayList();
+      const todayPlaylistId = gethomeDetails?.[0].items?.[0].encodeId;
+      console.log("todayPlaylistId", todayPlaylistId);
 
-	const dispatch = useAppDispatch();
+      // fetch today playlist
+      const todayPlaylist = await getDetailPlaylist(todayPlaylistId);
 
-	// get song details
-	useEffect(() => {
-		const fetchSong = async () => {
-			// get top songs
-			const chartHome: any = (await getCharthome())
-			const chartHomeNew = chartHome?.newRelease
+      // get random song in playlist
+      const todayPlaylistTotal = todayPlaylist?.song?.total;
+      const randomIndex = Math.floor(Math.random() * todayPlaylistTotal);
+      dispatch(setCurrnetIndexPlaylist(randomIndex))
 
-			// get the first song ID
-			const defaultSongId = chartHomeNew[0]?.encodeId
+      // get the random song ID
+      const todaySongLists = todayPlaylist?.song?.items;
+      const randomSongId = todaySongLists?.[randomIndex]?.encodeId;
+      console.log(randomSongId)
+      dispatch(setSongId(randomSongId))
 
-			// get song base on ID
-			const song = await getSong(defaultSongId);
-			const infoSong = await getInfoSong(defaultSongId);
+      // get song base on ID
+      const song = await getSong(randomSongId);
+      const infoSong = await getInfoSong(randomSongId);
 
-			// save to redux
-			dispatch(setSongId(defaultSongId))
-			dispatch(setSrcAudio(song[128]));
-			dispatch(
-				setInfoSongPlayer({
-					title: infoSong.title,
-					thumbnail: infoSong.thumbnailM,
-					artistsNames: infoSong.artistsNames,
-					artists: infoSong.artists,
-				})
-			);
-			dispatch(setDuration(infoSong.duration))
+      // save to redux
+      setCurrentSong(song, infoSong, randomSongId);
+      dispatch(
+        setPlaylistSong(
+          todaySongLists?.map((item: any) => {
+            return {
+              id: item?.encodeId,
+              title: item?.title,
+              thumbnail: item?.thumbnailM,
+              artists: item?.artistsNames,
+            };
+          })
+        )
+      );
+    };
+    fetchSong();
+  }, [dispatch, setCurrentSong]);
 
-			// SetCurrentSong(song, infoSong)
-		};
-		fetchSong();
-	}, [dispatch]);
-
-	return (
-		<div className=" fixed top-0 right-0 flex flex-col justify-between text-center float-right text-light_title_color w-80 h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
-			<Thumbnail />
-			<Controls />
-		</div>
-	);
+  return (
+    <div className="fixed top-0 right-0 flex flex-col justify-between text-center float-right text-light_title_color w-80 h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
+      <Thumbnail />
+      <Controls />
+    </div>
+  );
 };
 
 export default Player;

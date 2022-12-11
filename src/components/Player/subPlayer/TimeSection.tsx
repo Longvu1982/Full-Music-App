@@ -6,7 +6,13 @@ import { useAppSelector, useAppDispatch } from "../../../hooks/redux";
 import {
   changeIconPlay,
   setCurrentTime,
+  setCurrnetIndexPlaylist,
+  setSongId,
 } from "../../../redux/features/audioSlice";
+import { stat } from "fs";
+import { getInfoSong, getSong } from "../../../api/song";
+import { useSetCurrentSong } from "../../../utils/SetCurrentSong";
+import useClickSong from "../../../utils/handleClickSong";
 
 const TimeSlider = styled(Slider)({
   width: "180px",
@@ -38,7 +44,14 @@ const TimeSection: React.FC = () => {
   const volume = useAppSelector((state) => state.audio.volume);
   const currentTime = useAppSelector((state) => state.audio.currentTime);
   const isLoop = useAppSelector((state) => state.audio.isLoop);
-
+  const isShuffle = useAppSelector((state) => state.audio.isShuffle);
+  const clickSong = useClickSong();
+  const setCurrentSong = useSetCurrentSong();
+  const currnetIndexPlaylist = useAppSelector(
+    (state) => state.audio.currnetIndexPlaylist
+  );
+  const playlistSong: any = useAppSelector((state) => state.audio.playlistSong);
+  const songId = useAppSelector((state) => state.audio.songId);
   const dispatch = useAppDispatch();
 
   // music stop on mount
@@ -50,7 +63,7 @@ const TimeSection: React.FC = () => {
   useEffect(() => {
     if (isPlay) songRef?.current?.play();
     else songRef?.current?.pause();
-  }, [isPlay]);
+  }, [isPlay, songId]);
 
   // set audio volume
   useEffect(() => {
@@ -63,6 +76,58 @@ const TimeSection: React.FC = () => {
     if (songRef?.current) songRef.current.currentTime = newValue as number;
   };
 
+  // useEffect(() => {
+  //   const autoPlay = async () => {
+  //     const songId = (playlistSong?.[currnetIndexPlaylist] as any)?.id;
+  //     dispatch(setSongId(songId));
+  //     const song = await getSong(songId);
+  //     const infoSong = await getInfoSong(songId);
+  //     setCurrentSong(song, infoSong, songId);
+  //     // dispatch(changeIconPlay(true));
+  //   };
+  //   autoPlay();
+  // }, [currnetIndexPlaylist]);
+
+  const randomExcluded = (min: number, max: number, excluded: number) => {
+    var n = Math.floor(Math.random() * (max - min) + min);
+    if (n >= excluded) n++;
+    return n;
+  };
+
+  const handlePlaySongOnEnded = () => {
+    // if (!isShuffle) {
+    //   if (currnetIndexPlaylist === playlistSong.length - 1)
+    //     dispatch(setCurrnetIndexPlaylist(0));
+    //   else dispatch(setCurrnetIndexPlaylist(currnetIndexPlaylist + 1));
+    //   console.log(currnetIndexPlaylist);
+    // } else {
+    //   const randomIndex = randomExcluded(
+    //     0,
+    //     playlistSong.length - 1,
+    //     currnetIndexPlaylist
+    //   );
+    //   dispatch(setCurrnetIndexPlaylist(randomIndex));
+    // }
+    let tempIndex;
+    if (!isShuffle) {
+      if (currnetIndexPlaylist === playlistSong.length - 1) tempIndex = 0;
+      else tempIndex = currnetIndexPlaylist + 1;
+    } else {
+      tempIndex = randomExcluded(
+        0,
+        playlistSong.length - 1,
+        currnetIndexPlaylist
+      );
+    }
+    dispatch(setCurrnetIndexPlaylist(tempIndex));
+    clickSong(
+      playlistSong?.[tempIndex]?.id,
+      1,
+      playlistSong,
+      undefined,
+      tempIndex
+    );
+  };
   return (
     <div className="flex items-center justify-between">
       <span className="w-10 shrink-0 grow-0 text-left">
@@ -91,6 +156,7 @@ const TimeSection: React.FC = () => {
         }}
         onEnded={() => {
           dispatch(changeIconPlay(false));
+          handlePlaySongOnEnded();
         }}
       ></audio>
     </div>

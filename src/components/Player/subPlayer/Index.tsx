@@ -4,7 +4,8 @@ import TopSection from "./TopSection";
 import TimeSection from "./TimeSection";
 import SongControls from "./SongControls";
 
-const Controls: React.FC = () => {
+const Controls: React.FC = (props) => {
+	
 	return (
 		<div className="py-6">
 			<TopSection />

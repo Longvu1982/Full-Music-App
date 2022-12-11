@@ -7,58 +7,110 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faPause } from "@fortawesome/free-solid-svg-icons";
 import { faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { changeIconPlay, setLoop } from "../../../redux/features/audioSlice";
+import {
+  changeIconPlay,
+  setCurrnetIndexPlaylist,
+  setLoop,
+  setShuffle,
+} from "../../../redux/features/audioSlice";
+import useClickSong from "../../../utils/handleClickSong";
 
 const SongControls: React.FC = () => {
-	const [isRepeat, setRepeat] = useState<boolean>(false);
-	const [isShuffle, setShuffle] = useState<boolean>(false);
+  const [isRepeat, setRepeat] = useState<boolean>(false);
+  //   const [isShuffle, setShuffle] = useState<boolean>(false);
 
-	const isPlay = useAppSelector((state) => state.audio.isPlay);
-	const isLoop = useAppSelector((state) => state.audio.isLoop);
-	const dispatch = useAppDispatch();
+  const isPlay = useAppSelector((state) => state.audio.isPlay);
+  const isLoop = useAppSelector((state) => state.audio.isLoop);
+  const isShuffle = useAppSelector((state) => state.audio.isShuffle);
+  const playlistSong: any = useAppSelector((state) => state.audio.playlistSong);
+  const currnetIndexPlaylist = useAppSelector(
+    (state) => state.audio.currnetIndexPlaylist
+  );
+  const dispatch = useAppDispatch();
+  const clickSong = useClickSong();
 
-	const handleRepeat = () => {
-		dispatch(setLoop(!isLoop))
-		setRepeat(!isRepeat);
-	};
+  const handleRepeat = () => {
+    dispatch(setLoop(!isLoop));
+    setRepeat(!isRepeat);
+  };
 
-	const handleShuffle = () => {
-		setShuffle(!isShuffle);
-	};
+  const handleShuffle = () => {
+    dispatch(setShuffle(!isShuffle));
+  };
 
-	const handlePause = () => {
-		if (isPlay) dispatch(changeIconPlay(false));
-		else dispatch(changeIconPlay(true));
-	};
+  const handlePause = () => {
+    if (isPlay) dispatch(changeIconPlay(false));
+    else dispatch(changeIconPlay(true));
+  };
 
-	return (
-		<div className="flex items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center">
-			{/* shuffle button */}
-			<div onClick={handleShuffle} className="w-10 h-10">
-				<FontAwesomeIcon color={isShuffle ? "#1976d2" : ""} icon={faShuffle} className="" />
-			</div>
+  const handleNextSong = () => {
+    let tempIndex;
+    if (currnetIndexPlaylist === playlistSong.length - 1) tempIndex = 0;
+    else tempIndex = currnetIndexPlaylist + 1;
+    dispatch(setCurrnetIndexPlaylist(tempIndex));
+    clickSong(
+      playlistSong?.[tempIndex]?.id,
+      1,
+      playlistSong,
+      undefined,
+      tempIndex
+    );
+  };
 
-			{/* prev button */}
-			<div className="w-10 h-10">
-				<FontAwesomeIcon icon={faStepBackward} size="lg" className="" />
-			</div>
+  const handlePrevSong = () => {
+    let tempIndex;
+    if (currnetIndexPlaylist === 0) tempIndex = playlistSong.length - 1;
+    else tempIndex = currnetIndexPlaylist - 1;
+    dispatch(setCurrnetIndexPlaylist(tempIndex));
+    clickSong(
+      playlistSong?.[tempIndex]?.id,
+      1,
+      playlistSong,
+      undefined,
+      tempIndex
+    );
+  };
 
-			{/* play button */}
-			<div onClick={handlePause} className="w-16 h-16">
-				<FontAwesomeIcon icon={!isPlay ? faPlay : faPause} size="2xl" className="" />
-			</div>
+  return (
+    <div className="flex items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center">
+      {/* shuffle button */}
+      <div onClick={handleShuffle} className="w-10 h-10">
+        <FontAwesomeIcon
+          color={isShuffle ? "#1976d2" : ""}
+          icon={faShuffle}
+          className=""
+        />
+      </div>
 
-			{/* next button */}
-			<div className="w-10 h-10">
-				<FontAwesomeIcon icon={faStepForward} size="lg" className="" />
-			</div>
+      {/* prev button */}
+      <div onClick={handlePrevSong} className="w-10 h-10">
+        <FontAwesomeIcon icon={faStepBackward} size="lg" className="" />
+      </div>
 
-			{/* loop button */}
-			<div onClick={handleRepeat} className="w-10 h-10">
-				<FontAwesomeIcon color={isLoop ? "#1976d2" : ""} icon={faRepeat} className="" />
-			</div>
-		</div>
-	);
+      {/* play button */}
+      <div onClick={handlePause} className="w-16 h-16">
+        <FontAwesomeIcon
+          icon={!isPlay ? faPlay : faPause}
+          size="2xl"
+          className=""
+        />
+      </div>
+
+      {/* next button */}
+      <div onClick={handleNextSong} className="w-10 h-10">
+        <FontAwesomeIcon icon={faStepForward} size="lg" className="" />
+      </div>
+
+      {/* loop button */}
+      <div onClick={handleRepeat} className="w-10 h-10">
+        <FontAwesomeIcon
+          color={isLoop ? "#1976d2" : ""}
+          icon={faRepeat}
+          className=""
+        />
+      </div>
+    </div>
+  );
 };
 
 export default SongControls;

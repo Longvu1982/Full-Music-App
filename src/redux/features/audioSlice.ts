@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AudioState {
+	currentPlayListId: string;
 	isPlay: boolean;
 	isMute: boolean;
+	isShuffle: boolean;
 	songId: string;
 	currnetIndexPlaylist: number;
 	infoSongPlayer?: {
@@ -24,6 +26,7 @@ interface AudioState {
 const initialState: AudioState = {
 	isPlay: false,
 	isMute: false,
+	isShuffle: false,
 	songId: localStorage.getItem("songId") || "",
 	currnetIndexPlaylist: 0,
 	infoSongPlayer: undefined,
@@ -35,6 +38,7 @@ const initialState: AudioState = {
 	autoPlay: false,
 	playlistSong: [],
 	isLyric: false,
+	currentPlayListId: ""
 };
 
 const audioSlice = createSlice({
@@ -50,6 +54,10 @@ const audioSlice = createSlice({
 		setSongId: (state, action: PayloadAction<string>) => {
 			state.songId = action.payload;
 			localStorage.setItem("songId", action.payload);
+		},
+		setPlayListId: (state, action: PayloadAction<string>) => {
+			state.currentPlayListId = action.payload;
+			localStorage.setItem("playListId", action.payload);
 		},
 		setInfoSongPlayer: (state, action: PayloadAction<any>) => {
 			const { title, thumbnail, artistsNames, artists } = action.payload;
@@ -75,6 +83,9 @@ const audioSlice = createSlice({
 		setLoop: (state, action: PayloadAction<boolean>) => {
 			state.isLoop = action.payload;
 		},
+		setShuffle: (state, action: PayloadAction<boolean>) => {
+			state.isShuffle = action.payload;
+		},
 		setAutoPlay: (state, action: PayloadAction<boolean>) => {
 			state.autoPlay = action.payload;
 		},
@@ -87,6 +98,7 @@ const audioSlice = createSlice({
 		setOpenLyric: (state, action: PayloadAction<boolean>) => {
 			state.isLyric = action.payload;
 		},
+		
 	},
 });
 
@@ -104,5 +116,6 @@ export const {
 	setPlaylistSong,
 	setCurrnetIndexPlaylist,
 	setOpenLyric,
+	setShuffle,
 } = audioSlice.actions;
 export default audioSlice.reducer;
