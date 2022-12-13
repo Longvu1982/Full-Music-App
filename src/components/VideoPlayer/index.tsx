@@ -17,7 +17,7 @@ const VideoPlayer: React.FC<{id: string}> = ({id}) => {
   }, [id])
 
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full h-full">
       <div className="flex justify-center">
         <ReactPlayer
           url={
@@ -28,7 +28,7 @@ const VideoPlayer: React.FC<{id: string}> = ({id}) => {
           height="100%"
         />
       </div>
-      <div className="flex justify-center mt-3">
+      <div className=" absolute flex justify-center mt-3">
         <button
           className="style__buttons text-[color:var(--color-text)] font-medium"
           onClick={() => {

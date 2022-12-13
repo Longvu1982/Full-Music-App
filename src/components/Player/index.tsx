@@ -45,6 +45,7 @@ const Player: React.FC = () => {
           todaySongLists?.map((item: any) => {
             return {
               id: item?.encodeId,
+              status: item?.streamingStatus,
               title: item?.title,
               thumbnail: item?.thumbnailM,
               artists: item?.artistsNames,
