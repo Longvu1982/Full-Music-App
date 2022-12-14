@@ -34,7 +34,7 @@ const VideoSection: React.FC<any> = ({ videos }) => {
 									src={item?.thumbnailM}
 								/>
 
-								<div className="absolute flex items-center justify-center rounded-full border-2 border-white w-[20%] aspect-square top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+								<div className="absolute flex items-center justify-center rounded-full border-2 border-white w-[20%] max-w-[60px] aspect-square top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 									<FontAwesomeIcon className="w-[30%] h-[30%]" color="#fff" icon={faPlay} />
 								</div>
 							</div>

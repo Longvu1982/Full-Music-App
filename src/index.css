@@ -1,13 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+  .triangle {
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+  }
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&display=swap");
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+.triangle {
+  clip-path: polygon(0 0, 100% 100%, 100% 0);
 }
 
 p {
@@ -16,7 +24,7 @@ p {
 
 span {
   display: inline-block;
-  font-size: 13px
+  font-size: 13px;
 }
 
 input::-webkit-slider-thumb {
@@ -26,7 +34,9 @@ input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
 }
-input[type = "range"]::-webkit-slider-thumb ,input[type = "range"]::-ms-thumb,input[type = "range"]::-moz-range-thumb  {
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-ms-thumb,
+input[type="range"]::-moz-range-thumb {
   width: 100px;
 }
 
@@ -50,14 +60,12 @@ body.dark {
   --border-color: #636a7248;
   --third-color: #262f39;
   --active-song: #2f3944;
-
-
 }
 
 body {
   min-height: 100vh;
   background-color: var(--primary-color);
-  font-family: 'Barlow', sans-serif;
+  font-family: "Barlow", sans-serif;
   transition: all 0.2s ease-in-out;
 }
 
