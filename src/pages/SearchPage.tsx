@@ -6,11 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import PlayList from "../components/PLayList/PlayList";
 import { setOpenToast } from "../redux/features/audioSlice";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import ToastComponent from "../components/ToastComponent/ToastComponent";
+import MusicCard from "../components/MusicCard/MusicCard";
+import useClickSong from "../utils/handleClickSong";
 
 const VideoSection: React.FC<any> = ({ videos }) => {
 	const navigate = useNavigate();
-    const dispatch = useAppDispatch()
+	const dispatch = useAppDispatch();
 	return (
 		<div>
 			{videos && videos?.length > 0 && <h3 className="text-2xl font-semibold mb-4 text-light_title_color">Top MV</h3>}
@@ -20,7 +23,7 @@ const VideoSection: React.FC<any> = ({ videos }) => {
 						<div
 							key={index}
 							onClick={() => {
-                                if(item.streamingStatus === 2) dispatch(setOpenToast(true))
+								if (item.streamingStatus === 2) dispatch(setOpenToast(true));
 								else navigate(`/video/${item?.encodeId}`);
 							}}
 							className="group relative cursor-pointer flex flex-col flex-wrap gap-6 w-[calc((100%-32px)/3)]"
@@ -48,6 +51,28 @@ const VideoSection: React.FC<any> = ({ videos }) => {
 	);
 };
 
+const MusicSection: React.FC<any> = ({ songs }) => {
+	const clickSong = useClickSong();
+	const songId = useAppSelector((state) => state.audio.songId);
+	return (
+		<>
+			{songs && songs?.length > 0 && <h3 className="text-2xl font-semibold mb-4 text-light_title_color">Bài hát</h3>}
+			<div className="flex flex-wrap gap-4 mb-10">
+				{songs?.map((item: any, index: number) => (
+					<div
+						onClick={() => clickSong(item?.encodeId, item?.streamingStatus, item, index)}
+						key={index}
+						className={`flex ${
+							item?.encodeId === songId ? "bg-active item-active" : ""
+						} h-16 cursor-pointer hover:bg-third border-b-[0.5px] border-b-border_color items-center w-[calc((100%-16px)/2)] shrink-0 grow-0 px-4 text-lighter_text_color font-semibold`}
+					>
+						<MusicCard item={item} />
+					</div>
+				))}
+			</div>
+		</>
+	);
+};
 const SearchPage: React.FC = () => {
 	const [artists, setArtists] = useState<any>();
 	const [songs, setSongs] = useState<any>();
@@ -77,8 +102,10 @@ const SearchPage: React.FC = () => {
 
 	return (
 		<div>
+			<MusicSection songs={songs} />
 			<PlayList playlistTitle={"Playlists"} playlistItems={playLists} navigate={navigate} />
-			<VideoSection videos={videos?.slice(0, 3)} />
+			<VideoSection videos={videos} />
+			<ToastComponent />
 		</div>
 	);
 };

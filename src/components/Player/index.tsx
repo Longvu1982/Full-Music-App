@@ -65,4 +65,4 @@ const Player: React.FC = () => {
   );
 };
 
-export default Player;
+export default React.memo(Player);

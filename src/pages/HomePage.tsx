@@ -29,6 +29,8 @@ const HomePage: React.FC = () => {
 				{(isLoading ? Array.from(new Array(5)) : homeDetails).map((homeDetailsItem: any, homeDetailsIndex: number) => {
 					return (
 						<PlayList
+							key={homeDetailsIndex}
+							homeDetailsIndex={homeDetailsIndex}
 							playlistTitle={homeDetailsItem?.title}
 							playlistItems={homeDetailsItem?.items}
 							navigate={navigate}
