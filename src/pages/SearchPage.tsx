@@ -80,7 +80,50 @@ const SearchPage: React.FC = () => {
 	const [top, setTop] = useState<any>();
 	const [videos, setVideos] = useState<any>();
 	const { keyword } = useParams();
+	const [activeIndex, setActiveIndex] = useState<number>(1);
 	const navigate = useNavigate();
+
+	const TabButons = [
+		{
+			id: 1,
+			name: "Tất cả",
+			content: (
+				<div>
+					<MusicSection songs={songs?.slice(0,6)} />
+					<PlayList playlistTitle={"Playlists"} playlistItems={playLists?.slice(0, 5)} navigate={navigate} />
+					<VideoSection videos={videos?.slice(0, 3)} />
+					<ToastComponent />
+				</div>
+			),
+		},
+		{
+			id: 2,
+			name: "Bài hát",
+			content: (
+				<div>
+					<MusicSection songs={songs} />
+				</div>
+			),
+		},
+		{
+			id: 3,
+			name: "Playlist",
+			content: (
+				<div>
+					<PlayList playlistTitle={"Playlists"} playlistItems={playLists} navigate={navigate} />
+				</div>
+			),
+		},
+		{
+			id: 4,
+			name: "Top MV",
+			content: (
+				<div>
+					<VideoSection videos={videos} />
+				</div>
+			),
+		},
+	];
 
 	useEffect(() => {
 		const fetchSearchDetails = async () => {
@@ -101,12 +144,20 @@ const SearchPage: React.FC = () => {
 	console.log("videos", videos);
 
 	return (
-		<div>
-			<MusicSection songs={songs} />
-			<PlayList playlistTitle={"Playlists"} playlistItems={playLists} navigate={navigate} />
-			<VideoSection videos={videos} />
-			<ToastComponent />
-		</div>
+		<>
+			<div className="flex gap-8 mb-10">
+				{TabButons?.map((item) => {
+					return (
+						<div onClick={() => setActiveIndex(item.id)} className="cursor-pointer" key={item.id}>
+							<h1 className={`hover:brightness-110 pb-1 text-lg text-title_color ${item.id === activeIndex ? "border-b-2 border-b-[#1976d2]" : ""}`}>
+								{item.name}
+							</h1>
+						</div>
+					);
+				})}
+			</div>
+			{TabButons.find((item) => item.id === activeIndex)?.content}
+		</>
 	);
 };
 
