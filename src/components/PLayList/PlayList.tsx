@@ -20,7 +20,7 @@ const PlayList: React.FC<any> = ({ homeDetailsIndex, playlistTitle, playlistItem
 						<div
 							key={index}
 							onClick={() => navigate(`/playlist/${item.encodeId}`)}
-							className="relative cursor-pointer group w-[calc((100%_-_64px)/5)]"
+							className="relative cursor-pointer group md:w-[calc((100%_-_48px)/4)] xl:w-[calc((100%_-_64px)/5)]"
 						>
 							<div className="rounded-md w-full aspect-square">
 								<img className="max-w-none rounded-md w-full group-hover:blur-md transition-all" src={item.thumbnail} alt="" />

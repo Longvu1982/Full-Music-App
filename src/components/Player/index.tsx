@@ -9,58 +9,64 @@ import { getDetailPlaylist } from "../../api/detailPlaylist";
 import { setCurrnetIndexPlaylist, setPlaylistSong, setSongId } from "../../redux/features/audioSlice";
 
 const Player: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const setCurrentSong = useSetCurrentSong();
-  
-  // get song details
-  useEffect(() => {
-    const fetchSong = async () => {
-      // get today songs
-      const gethomeDetails: any = await getHomePlayList();
-      const todayPlaylistId = gethomeDetails?.[0].items?.[0].encodeId;
+	const dispatch = useAppDispatch();
+	const setCurrentSong = useSetCurrentSong();
 
-      // fetch today playlist
-      const todayPlaylist = await getDetailPlaylist(todayPlaylistId);
+	// get song details
+	useEffect(() => {
+		const fetchSong = async () => {
+			// get today songs
+			const gethomeDetails: any = await getHomePlayList();
+			const todayPlaylistId = gethomeDetails?.[0].items?.[0].encodeId;
 
-      // get random song in playlist
-      const todayPlaylistTotal = todayPlaylist?.song?.total;
-      const randomIndex = Math.floor(Math.random() * todayPlaylistTotal);
-      dispatch(setCurrnetIndexPlaylist(randomIndex))
+			// fetch today playlist
+			const todayPlaylist = await getDetailPlaylist(todayPlaylistId);
 
-      // get the random song ID
-      const todaySongLists = todayPlaylist?.song?.items;
-      const randomSongId = todaySongLists?.[randomIndex]?.encodeId;
-      dispatch(setSongId(randomSongId))
+			// get random song in playlist
+			const todayPlaylistTotal = todayPlaylist?.song?.total;
+			const randomIndex = Math.floor(Math.random() * todayPlaylistTotal);
+			dispatch(setCurrnetIndexPlaylist(randomIndex));
 
-      // get song base on ID
-      const song = await getSong(randomSongId);
-      const infoSong = await getInfoSong(randomSongId);
+			// get the random song ID
+			const todaySongLists = todayPlaylist?.song?.items;
+			let randomSongId: string = "";
+			let song: any;
+			let infoSong: any;
+			do {
+				randomSongId = todaySongLists?.[randomIndex]?.encodeId;
+				song = await getSong(randomSongId);
+				infoSong = await getInfoSong(randomSongId);
+				console.log("info song", infoSong.streamingStatus);
+			} while (infoSong?.streamingStatus === 2);
+			dispatch(setSongId(randomSongId));
 
-      // save to redux
-      setCurrentSong(song, infoSong, randomSongId);
-      dispatch(
-        setPlaylistSong(
-          todaySongLists?.map((item: any) => {
-            return {
-              id: item?.encodeId,
-              status: item?.streamingStatus,
-              title: item?.title,
-              thumbnail: item?.thumbnailM,
-              artists: item?.artistsNames,
-            };
-          })
-        )
-      );
-    };
-    fetchSong();
-  }, [dispatch, setCurrentSong]);
+			// get song base on ID
 
-  return (
-    <div className="fixed top-0 right-0 flex flex-col justify-between text-center float-right text-light_title_color w-80 h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
-      <Thumbnail />
-      <Controls />
-    </div>
-  );
+			// save to redux
+			setCurrentSong(song, infoSong, randomSongId);
+			dispatch(
+				setPlaylistSong(
+					todaySongLists?.map((item: any) => {
+						return {
+							id: item?.encodeId,
+							status: item?.streamingStatus,
+							title: item?.title,
+							thumbnail: item?.thumbnailM,
+							artists: item?.artistsNames,
+						};
+					})
+				)
+			);
+		};
+		fetchSong();
+	}, [dispatch, setCurrentSong]);
+
+	return (
+		<div className="fixed top-0 right-0 xl:flex flex-col justify-between text-center float-right text-light_title_color hidden w-80 h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
+			<Thumbnail />
+			<Controls />
+		</div>
+	);
 };
 
 export default React.memo(Player);
