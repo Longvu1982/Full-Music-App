@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
 		console.log(isLoading);
 		return (
 			<div className="w-full text-white">
-				{(isLoading ? Array.from(new Array(5)) : homeDetails).map((homeDetailsItem: any, homeDetailsIndex: number) => {
+				{(isLoading ? Array.from(new Array(5)) : homeDetails)?.map((homeDetailsItem: any, homeDetailsIndex: number) => {
 					return (
 						<PlayList
 							key={homeDetailsIndex}
