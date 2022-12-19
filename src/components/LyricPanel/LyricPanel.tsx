@@ -19,7 +19,6 @@ const LyricSection: React.FC<any> = ({ lyricRef, lyric }) => {
 	useEffect(() => {
 		let arg: ScrollIntoViewOptions = {};
 		// First time load
-		console.log("isScrollSmooth :", isScrollSmooth);
 		if (!isScrollSmooth) {
 			arg = {
 				inline: "center",
@@ -54,7 +53,7 @@ const LyricSection: React.FC<any> = ({ lyricRef, lyric }) => {
 				<Thumbnail />
 			</div>
 			<div className="relative">
-				<div className="w-[600px] pt-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
+				<div className="w-[600px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
 					{lyric?.map((item: any, index: number) => {
 						return (
 							<p
@@ -65,7 +64,6 @@ const LyricSection: React.FC<any> = ({ lyricRef, lyric }) => {
 								}
 								className="mb-4 w-fit flex items-center h-16"
 							>
-								{console.log("item?.word?.[0].startTime", item?.word?.[0].startTime)}
 								{item?.words?.map((wordItem: any, wordIndex: number) => {
 									return (
 										<span
@@ -104,8 +102,6 @@ const LyricPanel: React.FC = () => {
 		};
 		fetchLyric();
 	}, [songId]);
-
-	console.log("lyric: ", lyric);
 
 	return <AnimatePresence>{isLyric && <LyricSection lyric={lyric} lyricRef={lyricRef} />}</AnimatePresence>;
 };

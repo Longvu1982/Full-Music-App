@@ -9,9 +9,9 @@ import secondsToHms from "../utils/formatTimeToHour";
 import { useAppSelector } from "../hooks/redux";
 import { Skeleton } from "@mui/material";
 import useClickSong from "../utils/handleClickSong";
-import ToastComponent from "../components/ToastComponent/ToastComponent";
+// import ToastComponent from "../components/ToastComponent/ToastComponent";
 import MusicCard from "../components/MusicCard/MusicCard";
-import { getArtist } from "../api/artist";
+// import { getArtist } from "../api/artist";
 const PlayListPage: React.FC = () => {
 	const { playListId } = useParams();
 	const [playLists, setPlayList] = useState<any>();
@@ -26,9 +26,7 @@ const PlayListPage: React.FC = () => {
 	useEffect(() => {
 		const fetchPlayList = async () => {
 			const getPlayList = await getDetailPlaylist(playListId as string);
-			const getArtists = await getArtist("MONO-Nguyen-Viet-Hoang");
-			console.log("getArtists :", getArtists);
-			console.log(getPlayList);
+			// const getArtists = await getArtist("MONO-Nguyen-Viet-Hoang");
 			const getSongIdList = getPlayList?.song?.items?.map((item: any) => {
 				return {
 					id: item?.encodeId,
@@ -61,7 +59,6 @@ const PlayListPage: React.FC = () => {
 		scrollToActiveSong(activeRef);
 	}, [isLoading, currnetIndexPlaylist, songId]);
 
-	console.log(playLists?.thumbnailM);
 
 	const ArtistsSection: React.FC = () => {
 		return (
@@ -194,7 +191,7 @@ const PlayListPage: React.FC = () => {
 				</div>
 			</div>
 			{playLists?.artists && <ArtistsSection />}
-			<ToastComponent />
+			{/* <ToastComponent /> */}
 		</>
 	);
 };

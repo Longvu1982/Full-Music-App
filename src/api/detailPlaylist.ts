@@ -2,7 +2,7 @@ import axios from "../utils/axios"
 
 const getDetailPlaylist = async (id: string) => {
   try {
-    const data = await axios.get<any, any>("/detailplaylist", {
+    const {data} = await axios.get<any, any>("/detailplaylist", {
         params: {
           id: id
         }

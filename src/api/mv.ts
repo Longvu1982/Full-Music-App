@@ -2,7 +2,7 @@ import axios from "../utils/axios"
 
 const getMV = async (id: string) => {
   try {
-    const data = await axios.get<any, any>("/video", {
+    const {data} = await axios.get<any, any>("/video", {
       params: {
         id: id
       }
@@ -15,7 +15,7 @@ const getMV = async (id: string) => {
 
 const getlistMV = async (id: string, page: number, count: number) => {
   try {
-    const data = await axios.get<any, any>("/listmv", {
+    const {data} = await axios.get<any, any>("/listmv", {
       params: {
         id: id,
         page: page,

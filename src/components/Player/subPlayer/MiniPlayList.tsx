@@ -4,7 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useAppSelector } from "../../../hooks/redux";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import useClickSong from "../../../utils/handleClickSong";
-import ToastComponent from "../../ToastComponent/ToastComponent";
+// import ToastComponent from "../../ToastComponent/ToastComponent";
 
 const MiniPlayList: React.FC = () => {
 	const playlistSong = useAppSelector((state) => state.audio.playlistSong);
@@ -50,7 +50,7 @@ const MiniPlayList: React.FC = () => {
 					})}
 				</div>
 			</div>
-			<ToastComponent />
+			{/* <ToastComponent /> */}
 		</>
 	);
 };

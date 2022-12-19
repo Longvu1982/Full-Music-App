@@ -60,7 +60,6 @@ const TimeSection: React.FC = () => {
 	}, [volume]);
 
 	const handleChangeTime = (event: Event, newValue: number | number[]) => {
-		// console.log(newValue);
 		dispatch(setCurrentTime(newValue as number));
 		if (songRef?.current) songRef.current.currentTime = newValue as number;
 	};

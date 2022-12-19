@@ -18,7 +18,6 @@ const Player: React.FC = () => {
       // get today songs
       const gethomeDetails: any = await getHomePlayList();
       const todayPlaylistId = gethomeDetails?.[0].items?.[0].encodeId;
-      console.log("todayPlaylistId", todayPlaylistId);
 
       // fetch today playlist
       const todayPlaylist = await getDetailPlaylist(todayPlaylistId);
@@ -31,7 +30,6 @@ const Player: React.FC = () => {
       // get the random song ID
       const todaySongLists = todayPlaylist?.song?.items;
       const randomSongId = todaySongLists?.[randomIndex]?.encodeId;
-      console.log(randomSongId)
       dispatch(setSongId(randomSongId))
 
       // get song base on ID

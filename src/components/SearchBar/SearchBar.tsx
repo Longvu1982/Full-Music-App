@@ -9,7 +9,6 @@ const SearchBar: React.FC = () => {
 	const handleKeyPress = (e: any) => {
 		if (e.key === "Enter") {
 			// do whatever
-			console.log(e.target.value);
 			navigate(`/${e.target.value}`);
 		}
 	};

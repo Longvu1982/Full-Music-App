@@ -5,9 +5,9 @@ import { getSearch } from "../api/search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import PlayList from "../components/PLayList/PlayList";
-import { setOpenToast } from "../redux/features/audioSlice";
+import { setOpenToast, setWarningMsg } from "../redux/features/audioSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import ToastComponent from "../components/ToastComponent/ToastComponent";
+// import ToastComponent from "../components/ToastComponent/ToastComponent";
 import MusicCard from "../components/MusicCard/MusicCard";
 import useClickSong from "../utils/handleClickSong";
 
@@ -23,7 +23,8 @@ const VideoSection: React.FC<any> = ({ videos }) => {
 						<div
 							key={index}
 							onClick={() => {
-								if (item.streamingStatus === 2) dispatch(setOpenToast(true));
+								if (item.streamingStatus === 2) {dispatch(setOpenToast(true))
+								dispatch(setWarningMsg("Video chỉ dành cho tài khoản VIP !"))}
 								else navigate(`/video/${item?.encodeId}`);
 							}}
 							className="group relative cursor-pointer flex flex-col flex-wrap gap-6 w-[calc((100%-32px)/3)]"
@@ -74,10 +75,10 @@ const MusicSection: React.FC<any> = ({ songs }) => {
 	);
 };
 const SearchPage: React.FC = () => {
-	const [artists, setArtists] = useState<any>();
+	// const [artists, setArtists] = useState<any>();
 	const [songs, setSongs] = useState<any>();
 	const [playLists, setPlayLists] = useState<any>();
-	const [top, setTop] = useState<any>();
+	// const [top, setTop] = useState<any>();
 	const [videos, setVideos] = useState<any>();
 	const { keyword } = useParams();
 	const [activeIndex, setActiveIndex] = useState<number>(1);
@@ -92,7 +93,7 @@ const SearchPage: React.FC = () => {
 					<MusicSection songs={songs?.slice(0,6)} />
 					<PlayList playlistTitle={"Playlists"} playlistItems={playLists?.slice(0, 5)} navigate={navigate} />
 					<VideoSection videos={videos?.slice(0, 3)} />
-					<ToastComponent />
+					{/* <ToastComponent /> */}
 				</div>
 			),
 		},
@@ -128,20 +129,14 @@ const SearchPage: React.FC = () => {
 	useEffect(() => {
 		const fetchSearchDetails = async () => {
 			const getSearchDetails: any = await getSearch(keyword as string);
-			setArtists(getSearchDetails?.artists);
+			// setArtists(getSearchDetails?.artists);
 			setSongs(getSearchDetails?.songs);
 			setPlayLists(getSearchDetails?.playlists);
-			setTop(getSearchDetails?.top);
+			// setTop(getSearchDetails?.top);
 			setVideos(getSearchDetails?.videos);
 		};
 		fetchSearchDetails();
 	}, [keyword]);
-
-	console.log("artists", artists);
-	console.log("songs", songs);
-	console.log("playLists", playLists);
-	console.log("top", top);
-	console.log("videos", videos);
 
 	return (
 		<>

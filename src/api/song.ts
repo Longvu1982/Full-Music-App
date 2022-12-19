@@ -2,13 +2,14 @@ import axios from "../utils/axios"
 
 const getSong = async (id: string) => {
   try {
-    const data = await axios.get<any, any>("/song", {
+    const {err, msg, data} = await axios.get<any, any>("/song", {
         params: {
           id: id
         }
       }
     )
-    return data
+    console.log("data", data)
+    return {err, msg, data}
   } catch(err) {
     console.log(err)
   }
@@ -16,7 +17,7 @@ const getSong = async (id: string) => {
 
 const getInfoSong = async (id: string) => {
   try {
-    const data = await axios.get<any, any>("/infosong", {
+    const {data} = await axios.get<any, any>("/infosong", {
         params: {
           id: id
         }

@@ -88,7 +88,6 @@ const TopSection = () => {
 		dispatch(changeIconVolume(false));
 		setVolumeValue(newValue as number);
 		dispatch(setVolume((newValue as number) / 100));
-		// console.log(newValue);
 		setPreMuteVolume(newValue as number);
 	};
 

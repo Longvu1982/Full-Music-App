@@ -6,6 +6,7 @@ import { setOpenToast } from "../../redux/features/audioSlice";
 
 const ToastComponent: React.FC = () => {
     const isOpenToast = useAppSelector(state => state.audio.isOpenToast)
+    const warningMsg = useAppSelector(state => state.audio.warningMsg)
     const dispatch = useAppDispatch()
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === "clickaway") {
@@ -22,7 +23,7 @@ const ToastComponent: React.FC = () => {
             autoHideDuration={2000}
         >
             <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-                Chỉ dành cho tài khoản VIP !
+                {warningMsg}
             </Alert>
         </Snackbar>
     );

@@ -9,7 +9,7 @@ import { changeIconPlay } from "../redux/features/audioSlice";
 
 const VideoPage: React.FC = () => {
 	const { videoId } = useParams();
-	const [video, setVideo] = useState<any>();
+	// const [video, setVideo] = useState<any>();
 	const [videoSrcList, setVideoSrcList] = useState<{ [key: string]: string }>();
     const isPlay = useAppSelector(state => state.audio.isPlay)
     const dispatch = useAppDispatch()
@@ -18,7 +18,7 @@ const VideoPage: React.FC = () => {
         if(isPlay) dispatch(changeIconPlay(false))
 		const fetchVideo = async () => {
 			const getVideoDetails = await getMV(videoId as string);
-			setVideo(getVideoDetails);
+			// setVideo(getVideoDetails);
 			setVideoSrcList(getVideoDetails?.streaming?.mp4);
 		};
 		fetchVideo();
@@ -37,7 +37,6 @@ const VideoPage: React.FC = () => {
 			});
 	}, [videoSrcList]);
 
-	console.log(video);
 	return (
 		<div>
 			{srcList && <Player src={srcList} />}

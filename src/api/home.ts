@@ -7,7 +7,7 @@ interface dataType {
 
 const getHomePlayList = async () => {
   try {
-    const data:dataType =  await axios.get("/home")
+    const {data}:{data: dataType} =  await axios.get("/home")
     return data.items.filter((e:dataType) => e.sectionType === "playlist" )
   } catch(err) {
     console.log(err)

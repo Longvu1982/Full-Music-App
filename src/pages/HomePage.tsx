@@ -13,7 +13,6 @@ const HomePage: React.FC = () => {
 	useEffect(() => {
 		const fetchHome = async () => {
 			const gethomeDetails = await getHomePlayList();
-			console.log(gethomeDetails);
 			setHomeDetails(gethomeDetails);
 
 			// set loading
@@ -23,7 +22,6 @@ const HomePage: React.FC = () => {
 	}, []);
 
 	const HomePageElement: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
-		console.log(isLoading);
 		return (
 			<div className="w-full text-white">
 				{(isLoading ? Array.from(new Array(5)) : homeDetails)?.map((homeDetailsItem: any, homeDetailsIndex: number) => {

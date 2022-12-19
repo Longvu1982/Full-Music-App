@@ -9,7 +9,6 @@ const NavBar: React.FC = () => {
 	const [activeBtn, setActiveBtn] = useState<number>(1);
 	const navigate = useNavigate();
 	const location = useLocation();
-	console.log(location.pathname);
 
 	const handleChangeTheme = (option: string) => {
 		if (option === "add") document.body.classList.add("dark");
