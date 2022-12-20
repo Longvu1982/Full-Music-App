@@ -20,7 +20,7 @@ const PlayList: React.FC<any> = ({ homeDetailsIndex, playlistTitle, playlistItem
 						<div
 							key={index}
 							onClick={() => navigate(`/playlist/${item.encodeId}`)}
-							className="relative cursor-pointer group md:w-[calc((100%_-_48px)/4)] xl:w-[calc((100%_-_64px)/5)]"
+							className="relative cursor-pointer group w-full sm:w-[calc((100%_-_16px)/2)] md:w-[calc((100%_-_48px)/4)] xl:w-[calc((100%_-_64px)/5)]"
 						>
 							<div className="rounded-md w-full aspect-square">
 								<img className="max-w-none rounded-md w-full group-hover:blur-md transition-all" src={item.thumbnail} alt="" />
@@ -32,7 +32,7 @@ const PlayList: React.FC<any> = ({ homeDetailsIndex, playlistTitle, playlistItem
 							<p className="line-clamp-2 text-lighter_text_color">{item.sortDescription}</p>
 						</div>
 					) : (
-						<div key={index} className="w-[calc((100%_-_64px)/5)] aspect-square">
+						<div key={index} className="xl:w-[calc((100%_-_64px)/5)] sm:w-[calc((100%_-_16px)/2)] w-full md:w-[calc((100%_-_48px)/4)] aspect-square">
 							<Skeleton variant="rectangular" width="100%" height="100%" />
 						</div>
 					);

@@ -7,7 +7,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 const MusicCard: React.FC<any> = ({ item }) => {
 	return (
 		<>
-			<FontAwesomeIcon className="mr-4" size="xs" icon={faMusic} />
+			<FontAwesomeIcon className="hidden md:block mr-4" size="xs" icon={faMusic} />
 			<div className="relative h-[45px] w-[45px]">
 				{!item ? (
 					<Skeleton width={45} variant="rectangular" height={45} />

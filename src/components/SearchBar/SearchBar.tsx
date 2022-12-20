@@ -13,7 +13,7 @@ const SearchBar: React.FC = () => {
 		}
 	};
 	return (
-		<div className="h-12 w-96 bg-third mb-10 rounded-sm overflow-hidden gap-2 flex items-center py-1 px-4">
+		<div className="h-12 w-96 max-w-full bg-third mb-10 rounded-sm overflow-hidden gap-2 flex items-center py-1 px-4">
 			<FontAwesomeIcon className="text-light_title_color" icon={faSearch} />
 			<input
 				onKeyUp={(e) => handleKeyPress(e)}

@@ -65,10 +65,10 @@ const PlayListPage: React.FC = () => {
 		return (
 			<div className="my-20">
 				<h1 className="text-title_color text-2xl font-semibold mb-10">Nghệ Sĩ Tham Gia</h1>
-				<div className="flex gap-6">
+				<div className="flex gap-6 flex-wrap">
 					{playLists?.artists?.map((artistItem: any, artistIndex: number) => {
 						return (
-							<div key={artistIndex} className="flex flex-col w-[calc((100%-96px)/5)] max-w-[240px] shrink-0 grow-0">
+							<div key={artistIndex} className="flex flex-col w-full md:w-[calc((100%-96px)/5)] max-w-[240px] shrink-0 grow-0">
 								<div className="w-full aspect-square">
 									<img
 										className="min-w-full min-h-full object-cover rounded-full hover:brightness-[1.3] transition-all cursor-pointer"
@@ -91,14 +91,14 @@ const PlayListPage: React.FC = () => {
 
 	return (
 		<>
-			<div className="flex gap-10">
+			<div className="flex flex-col md:flex-row items-center md:items-start gap-10">
 				{/* thumbnail section */}
-				<div className="cursor-pointer w-96 h-auto shink-0 grow-0">
+				<div className="cursor-pointer max-w-full w-96 h-auto shink-0 grow-0">
 					<div className="w-full group aspect-square rounded-lg overflow-hidden">
 						{isLoading ? (
 							<Skeleton variant="rectangular" width="100%" height="100%" />
 						) : (
-							<img className="group-hover:scale-110 transition-all" alt="" src={playLists?.thumbnailM} />
+							<img className="w-full h-full group-hover:scale-110 transition-all" alt="" src={playLists?.thumbnailM} />
 						)}
 					</div>
 					{isLoading ? (
@@ -133,10 +133,10 @@ const PlayListPage: React.FC = () => {
 							<FontAwesomeIcon icon={faAward} />
 							<p className="ml-4">BÀI HÁT</p>
 						</div>
-						<div className=" flex items-center w-[35%] shrink-0 grow-0 ">
+						<div className="hidden md:flex items-center w-[35%] shrink-0 grow-0 ">
 							<p>ALBUM</p>
 						</div>
-						<div className="flex items-center w-[15%] shrink-0 grow-0 ">
+						<div className="hidden md:flex items-center w-[15%] shrink-0 grow-0 ">
 							<p className="w-full text-right">THỜI GIAN</p>
 						</div>
 					</div>
@@ -156,17 +156,17 @@ const PlayListPage: React.FC = () => {
 										item?.encodeId === songId ? "bg-active item-active" : ""
 									} cursor-pointer hover:bg-third h-16 flex text-lighter_text_color text-base font-semibold border-b-[0.5px] border-b-border_color px-2`}
 								>
-									<div className="flex items-center w-[50%] shrink-0 grow-0 pr-4">
+									<div className="flex items-center w-full md:w-[50%] shrink-0 grow-0 pr-4">
 										<MusicCard item={item} />
 									</div>
-									<div className="flex items-center w-[35%] shrink-0 grow-0">
+									<div className="md:flex items-center hidden w-[35%] shrink-0 grow-0">
 										{!item ? (
 											<Skeleton variant="rectangular" width={150} height={30} />
 										) : (
 											<p className="line-clamp-1 font-medium">{item?.album?.title}</p>
 										)}
 									</div>
-									<div className="flex justify-end items-center w-[15%] shrink-0 grow-0 pr-3">
+									<div className="md:flex hidden justify-end items-center w-[15%] shrink-0 grow-0 pr-3">
 										{!item ? (
 											<Skeleton variant="rectangular" width="60%" height={30} />
 										) : (
