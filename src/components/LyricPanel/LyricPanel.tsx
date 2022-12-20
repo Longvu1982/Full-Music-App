@@ -6,10 +6,12 @@ import { faX } from "@fortawesome/free-solid-svg-icons";
 import { setOpenLyric } from "../../redux/features/audioSlice";
 import { getLyric } from "../../api/lyric";
 import { Thumbnail } from "../Player/subPlayer/Thumbnail";
+import PlayingLoading from "../PlayingLoading/PlayingLoading";
 
 const LyricSection: React.FC = () => {
 	const [lyric, setLyric] = useState<any[] | undefined>(undefined);
 	const lyricRef: LegacyRef<HTMLParagraphElement> | undefined = useRef(null);
+	const [isLyricLoaded, setLyricLoaded] = useState<boolean>(false);
 
 	// state to control smooth
 	const [isScrollSmooth, setScrollSmooth] = useState<boolean>(false);
@@ -24,6 +26,7 @@ const LyricSection: React.FC = () => {
 		const fetchLyric = async () => {
 			const getLyricDetail: any = await getLyric(songId as string);
 			setLyric(getLyricDetail?.sentences);
+			setLyricLoaded(true);
 		};
 		fetchLyric();
 	}, [songId]);
@@ -65,37 +68,43 @@ const LyricSection: React.FC = () => {
 			<div className="scale-125 origin-bottom mt-20 border-2 border-border_color text-center text-light_title_color">
 				<Thumbnail />
 			</div>
-			<div className="relative">
-				<div className="w-[600px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
-					{lyric?.map((item: any, index: number) => {
-						return (
-							<p
-								ref={
-									item?.words?.[0].startTime <= currentTime && item?.words?.at(-1).endTime >= currentTime
-										? lyricRef
-										: undefined
-								}
-								className="mb-4 w-fit flex items-center h-16"
-							>
-								{item?.words?.map((wordItem: any, wordIndex: number) => {
-									return (
-										<span
-											className={`transition-all duration-75 text-3xl font-bold  mr-2 ${
-												wordItem?.startTime <= currentTime && wordItem?.endTime >= currentTime
-													? "text-yellow-500 text-4xl"
-													: "text-light_title_color"
-											}`}
-										>
-											{wordItem?.data}
-										</span>
-									);
-								})}
-							</p>
-						);
-					})}
+			{isLyricLoaded ? (
+				<div className="relative">
+					<div className="w-[600px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
+						{lyric?.map((item: any, index: number) => {
+							return (
+								<p
+									ref={
+										item?.words?.[0].startTime <= currentTime && item?.words?.at(-1).endTime >= currentTime
+											? lyricRef
+											: undefined
+									}
+									className="mb-4 w-fit flex items-center h-16"
+								>
+									{item?.words?.map((wordItem: any, wordIndex: number) => {
+										return (
+											<span
+												className={`transition-all duration-75 text-3xl font-bold  mr-2 ${
+													wordItem?.startTime <= currentTime && wordItem?.endTime >= currentTime
+														? "text-yellow-500 text-4xl"
+														: "text-light_title_color"
+												}`}
+											>
+												{wordItem?.data}
+											</span>
+										);
+									})}
+								</p>
+							);
+						})}
+					</div>
+					<div className="lyric-container-overlay"></div>
 				</div>
-				<div className="lyric-container-overlay"></div>
-			</div>
+			) : (
+				<div className="w-[600px] h-[550px] flex items-center justify-start">
+					<PlayingLoading />
+				</div>
+			)}
 		</motion.div>
 	);
 };

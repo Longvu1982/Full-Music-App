@@ -69,7 +69,7 @@ const SongControls: React.FC = () => {
 			{/* play button */}
 
 			{!isSongLoaded ? (
-				<div className="w-16 h-16"><PlayingLoading /></div>
+				<div className="w-16 h-16 flex items-center justify-center"><PlayingLoading /></div>
 			) : (
 				<div onClick={handlePause} className="w-16 h-16">
 					<FontAwesomeIcon icon={!isPlay ? faPlay : faPause} size="2xl" className="" />
