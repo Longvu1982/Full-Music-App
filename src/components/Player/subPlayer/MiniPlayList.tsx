@@ -28,7 +28,13 @@ const MiniPlayList: React.FC = () => {
 						return (
 							<div
 								onClick={() => {
-									clickSong(item?.id, item?.status, songIdList, index);
+									clickSong(item?.id, item?.status, songIdList, index, {
+										title: item?.title,
+										thumbnailM: item?.thumbnail,
+										artists: item?.artists,
+										duration: item?.duration,
+										artistsNames: item?.artistsNames
+									});
 								}}
 								key={index}
 								ref={item?.id === songId ? activeRef : undefined}

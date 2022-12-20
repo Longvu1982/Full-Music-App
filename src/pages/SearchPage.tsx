@@ -61,7 +61,7 @@ const MusicSection: React.FC<any> = ({ songs }) => {
 			<div className="flex flex-wrap gap-4 mb-10">
 				{songs?.map((item: any, index: number) => (
 					<div
-						onClick={() => clickSong(item?.encodeId, item?.streamingStatus, item, index)}
+						onClick={() => clickSong(item?.encodeId, item?.streamingStatus, item, index, item)}
 						key={index}
 						className={`flex ${
 							item?.encodeId === songId ? "bg-active item-active" : ""

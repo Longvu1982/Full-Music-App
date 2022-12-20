@@ -34,6 +34,8 @@ const PlayListPage: React.FC = () => {
 					status: item?.streamingStatus,
 					thumbnail: item?.thumbnailM,
 					artists: item?.artistsNames,
+					duration: item?.duration,
+					artistsNames: item?.artistsNames,
 				};
 			});
 			setSongIdList(getSongIdList);
@@ -58,7 +60,6 @@ const PlayListPage: React.FC = () => {
 	useEffect(() => {
 		scrollToActiveSong(activeRef);
 	}, [isLoading, currnetIndexPlaylist, songId]);
-
 
 	const ArtistsSection: React.FC = () => {
 		return (
@@ -146,7 +147,7 @@ const PlayListPage: React.FC = () => {
 							return (
 								<div
 									onClick={
-										() => clickSong(item?.encodeId, item?.streamingStatus, songIdList, index)
+										() => clickSong(item?.encodeId, item?.streamingStatus, songIdList, index, item)
 										// handleClickSong(item?.encodeId, item?.streamingStatus)
 									}
 									ref={item?.encodeId === songId ? activeRef : undefined}

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AudioState {
+	isSongLoaded: boolean;
 	warningMsg: string;
 	isOpenToast: boolean;
 	currentPlayListId: string;
@@ -26,6 +27,7 @@ interface AudioState {
 }
 
 const initialState: AudioState = {
+	isSongLoaded: false,
 	warningMsg: "",
 	isOpenToast: false,
 	isPlay: false,
@@ -108,6 +110,9 @@ const audioSlice = createSlice({
 		setWarningMsg: (state, action: PayloadAction<string>) => {
 			state.warningMsg = action.payload;
 		},
+		setSongLoaded: (state, action: PayloadAction<boolean>) => {
+			state.isSongLoaded = action.payload;
+		},
 	},
 });
 
@@ -128,5 +133,6 @@ export const {
 	setShuffle,
 	setOpenToast,
 	setWarningMsg,
+	setSongLoaded,
 } = audioSlice.actions;
 export default audioSlice.reducer;

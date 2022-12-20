@@ -7,13 +7,26 @@ import { setOpenLyric } from "../../redux/features/audioSlice";
 import { getLyric } from "../../api/lyric";
 import { Thumbnail } from "../Player/subPlayer/Thumbnail";
 
-const LyricSection: React.FC<any> = ({ lyricRef, lyric }) => {
+const LyricSection: React.FC = () => {
+	const [lyric, setLyric] = useState<any[] | undefined>(undefined);
+	const lyricRef: LegacyRef<HTMLParagraphElement> | undefined = useRef(null);
+
 	// state to control smooth
 	const [isScrollSmooth, setScrollSmooth] = useState<boolean>(false);
 
 	// redux
 	const currentTime = useAppSelector((state) => state.audio.currentTime) * 1000;
+	const songId = useAppSelector((state) => state.audio.songId);
 	const dispatch = useAppDispatch();
+
+	// get lyric
+	useEffect(() => {
+		const fetchLyric = async () => {
+			const getLyricDetail: any = await getLyric(songId as string);
+			setLyric(getLyricDetail?.sentences);
+		};
+		fetchLyric();
+	}, [songId]);
 
 	// skip smooth on mount
 	useEffect(() => {
@@ -88,22 +101,9 @@ const LyricSection: React.FC<any> = ({ lyricRef, lyric }) => {
 };
 
 const LyricPanel: React.FC = () => {
-	const [lyric, setLyric] = useState<any[] | undefined>(undefined);
-	const lyricRef: LegacyRef<HTMLParagraphElement> | undefined = useRef(null);
-
 	const isLyric = useAppSelector((state) => state.audio.isLyric);
-	const songId = useAppSelector((state) => state.audio.songId);
 
-	// get lyric
-	useEffect(() => {
-		const fetchLyric = async () => {
-			const getLyricDetail: any = await getLyric(songId as string);
-			setLyric(getLyricDetail?.sentences);
-		};
-		fetchLyric();
-	}, [songId]);
-
-	return <AnimatePresence>{isLyric && <LyricSection lyric={lyric} lyricRef={lyricRef} />}</AnimatePresence>;
+	return <AnimatePresence>{isLyric && <LyricSection />}</AnimatePresence>;
 };
 
 export default LyricPanel;

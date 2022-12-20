@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Thumbnail } from "./subPlayer/Thumbnail";
 import Controls from "./subPlayer/Index";
-import { getSong, getInfoSong } from "../../api/song";
+import { getSong } from "../../api/song";
 import { useAppDispatch } from "../../hooks/redux";
 import { useSetCurrentSong } from "../../utils/SetCurrentSong";
 import { getHomePlayList } from "../../api/home";
@@ -23,27 +23,26 @@ const Player: React.FC = () => {
 			const todayPlaylist = await getDetailPlaylist(todayPlaylistId);
 
 			// get random song in playlist
-			const todayPlaylistTotal = todayPlaylist?.song?.total;
-			const randomIndex = Math.floor(Math.random() * todayPlaylistTotal);
-			dispatch(setCurrnetIndexPlaylist(randomIndex));
+			// const todayPlaylistTotal = todayPlaylist?.song?.total;
+			// const randomIndex = Math.floor(Math.random() * todayPlaylistTotal);
+			dispatch(setCurrnetIndexPlaylist(0));
 
 			// get the random song ID
 			const todaySongLists = todayPlaylist?.song?.items;
-			let randomSongId: string = "";
-			let song: any;
-			let infoSong: any;
-			do {
-				randomSongId = todaySongLists?.[randomIndex]?.encodeId;
-				song = await getSong(randomSongId);
-				infoSong = await getInfoSong(randomSongId);
-				console.log("info song", infoSong.streamingStatus);
-			} while (infoSong?.streamingStatus === 2);
+			// let randomSongId: string = "";
+			// let song: any;
+			// let infoSong: any;
+			// do {
+			const randomSongId = todaySongLists?.[0]?.encodeId;
+			const song = await getSong(randomSongId);
+			// const infoSong = await getInfoSong(randomSongId);
+			// } while (infoSong?.streamingStatus === 2);
 			dispatch(setSongId(randomSongId));
 
 			// get song base on ID
 
 			// save to redux
-			setCurrentSong(song, infoSong, randomSongId);
+			setCurrentSong(song, todaySongLists?.[0], randomSongId);
 			dispatch(
 				setPlaylistSong(
 					todaySongLists?.map((item: any) => {
@@ -53,6 +52,8 @@ const Player: React.FC = () => {
 							title: item?.title,
 							thumbnail: item?.thumbnailM,
 							artists: item?.artistsNames,
+							duration: item?.duration,
+							artistsNames: item?.artistsNames
 						};
 					})
 				)

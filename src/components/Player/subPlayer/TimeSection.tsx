@@ -3,7 +3,12 @@ import Slider from "@mui/material/Slider";
 import { formatTime } from "../../../utils/formatTime";
 import { styled } from "@mui/material/styles";
 import { useAppSelector, useAppDispatch } from "../../../hooks/redux";
-import { changeIconPlay, setCurrentTime, setCurrnetIndexPlaylist } from "../../../redux/features/audioSlice";
+import {
+	changeIconPlay,
+	setCurrentTime,
+	setCurrnetIndexPlaylist,
+	setSongLoaded,
+} from "../../../redux/features/audioSlice";
 import useClickSong from "../../../utils/handleClickSong";
 
 const TimeSlider = styled(Slider)({
@@ -79,7 +84,7 @@ const TimeSection: React.FC = () => {
 			tempIndex = randomExcluded(0, playlistSong.length - 1, currnetIndexPlaylist);
 		}
 		dispatch(setCurrnetIndexPlaylist(tempIndex));
-		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex);
+		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex, {...playlistSong?.[tempIndex], thumbnailM: playlistSong?.[tempIndex].thumbnail});
 	};
 	return (
 		<div className="flex items-center justify-between">
@@ -95,6 +100,8 @@ const TimeSection: React.FC = () => {
 			/>
 			<span className="w-10 shrink-0 grow-0 text-right">{formatTime(duration)}</span>
 			<audio
+				onLoadStart={() => dispatch(setSongLoaded(false))}
+				onCanPlay={() => dispatch(setSongLoaded(true))}
 				autoPlay={isPlay}
 				muted={isMute}
 				loop={isLoop}

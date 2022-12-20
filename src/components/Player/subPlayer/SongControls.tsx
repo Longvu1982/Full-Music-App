@@ -9,6 +9,7 @@ import { faRepeat } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { changeIconPlay, setCurrnetIndexPlaylist, setLoop, setShuffle } from "../../../redux/features/audioSlice";
 import useClickSong from "../../../utils/handleClickSong";
+import PlayingLoading from "../../PlayingLoading/PlayingLoading";
 
 const SongControls: React.FC = () => {
 	const [isRepeat, setRepeat] = useState<boolean>(false);
@@ -18,6 +19,7 @@ const SongControls: React.FC = () => {
 	const isLoop = useAppSelector((state) => state.audio.isLoop);
 	const isShuffle = useAppSelector((state) => state.audio.isShuffle);
 	const playlistSong: any = useAppSelector((state) => state.audio.playlistSong);
+	const isSongLoaded: boolean = useAppSelector((state) => state.audio.isSongLoaded);
 	const currnetIndexPlaylist = useAppSelector((state) => state.audio.currnetIndexPlaylist);
 	const dispatch = useAppDispatch();
 	const clickSong = useClickSong();
@@ -41,7 +43,7 @@ const SongControls: React.FC = () => {
 		if (currnetIndexPlaylist === playlistSong.length - 1) tempIndex = 0;
 		else tempIndex = currnetIndexPlaylist + 1;
 		dispatch(setCurrnetIndexPlaylist(tempIndex));
-		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex);
+		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex, {...playlistSong?.[tempIndex], thumbnailM: playlistSong?.[tempIndex].thumbnail});
 	};
 
 	const handlePrevSong = () => {
@@ -49,11 +51,11 @@ const SongControls: React.FC = () => {
 		if (currnetIndexPlaylist === 0) tempIndex = playlistSong.length - 1;
 		else tempIndex = currnetIndexPlaylist - 1;
 		dispatch(setCurrnetIndexPlaylist(tempIndex));
-		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex);
+		clickSong(playlistSong?.[tempIndex]?.id, 1, playlistSong, tempIndex, {...playlistSong?.[tempIndex], thumbnailM: playlistSong?.[tempIndex].thumbnail});
 	};
 
 	return (
-		<div className="flex items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center">
+		<div className="flex items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center h-[104px]">
 			{/* shuffle button */}
 			<div onClick={handleShuffle} className="w-10 h-10">
 				<FontAwesomeIcon color={isShuffle ? "#1976d2" : ""} icon={faShuffle} className="" />
@@ -65,9 +67,14 @@ const SongControls: React.FC = () => {
 			</div>
 
 			{/* play button */}
-			<div onClick={handlePause} className="w-16 h-16">
-				<FontAwesomeIcon icon={!isPlay ? faPlay : faPause} size="2xl" className="" />
-			</div>
+
+			{!isSongLoaded ? (
+				<div className="w-16 h-16"><PlayingLoading /></div>
+			) : (
+				<div onClick={handlePause} className="w-16 h-16">
+					<FontAwesomeIcon icon={!isPlay ? faPlay : faPause} size="2xl" className="" />
+				</div>
+			)}
 
 			{/* next button */}
 			<div onClick={handleNextSong} className="w-10 h-10">
