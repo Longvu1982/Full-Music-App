@@ -9,7 +9,7 @@ import VideoPage from "../pages/VideoPage";
 
 const RouterPage: React.FC = () => {
 	return (
-		<div className="ml-16 mr-0 xl:mr-80 overflow-x-hidden w-full p-8">
+		<div className="ml-16 mr-0 xl:mr-80 overflow-x-hidden w-full px-2 md:px-8 py-8">
 			<SearchBar />
 			<Routes>
 				<Route index element={<HomePage />}></Route>

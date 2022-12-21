@@ -57,7 +57,7 @@ const LyricSection: React.FC = () => {
 			initial={{ y: "100vh" }}
 			animate={{ y: 0 }}
 			exit={{ y: "100vh" }}
-			className="flex gap-20 items-center  justify-center border-2 border-border_color fixed bottom-0 right-2 shadow-slate-600 left-2 h-[95vh] rounded-t-2xl bg-third"
+			className="flex gap-20 items-center  justify-center border-2 border-border_color fixed bottom-0 right-2 shadow-slate-600 left-16 h-[95vh] rounded-t-2xl bg-third"
 		>
 			<div
 				onClick={() => dispatch(setOpenLyric(false))}
@@ -65,12 +65,12 @@ const LyricSection: React.FC = () => {
 			>
 				<FontAwesomeIcon icon={faX} />
 			</div>
-			<div className="scale-125 origin-bottom mt-20 border-2 border-border_color text-center text-light_title_color">
+			<div className="scale-125 hidden xl:block origin-bottom mt-20 border-2 border-border_color text-center text-light_title_color">
 				<Thumbnail />
 			</div>
 			{isLyricLoaded ? (
-				<div className="relative">
-					<div className="w-[600px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
+				<div className="relative max-w-full px-4">
+					<div className="xl:w-[600px] w-[400px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
 						{lyric?.map((item: any, index: number) => {
 							return (
 								<p
@@ -79,14 +79,14 @@ const LyricSection: React.FC = () => {
 											? lyricRef
 											: undefined
 									}
-									className="mb-4 w-fit flex items-center h-16"
+									className=" mb-2 xl:mb-4 w-fit flex items-center h-16"
 								>
 									{item?.words?.map((wordItem: any, wordIndex: number) => {
 										return (
 											<span
-												className={`transition-all duration-75 text-3xl font-bold  mr-2 ${
+												className={`transition-all duration-75 text-xl xl:text-3xl font-bold  mr-2 ${
 													wordItem?.startTime <= currentTime && wordItem?.endTime >= currentTime
-														? "text-yellow-500 text-4xl"
+														? "text-yellow-500  text-4xl"
 														: "text-light_title_color"
 												}`}
 											>
@@ -101,7 +101,7 @@ const LyricSection: React.FC = () => {
 					<div className="lyric-container-overlay"></div>
 				</div>
 			) : (
-				<div className="w-[600px] h-[550px] flex items-center justify-start">
+				<div className="xl:w-[600px] w-[400px] h-[550px] flex items-center justify-start">
 					<PlayingLoading />
 				</div>
 			)}
