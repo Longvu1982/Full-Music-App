@@ -10,7 +10,6 @@ export function useSetCurrentSong() {
 
   // set song details to redux
   return (song: any, infoSong: any, encodeId: string) => {
-    console.log(infoSong)
     // dispatch(setSongId(encodeId));
     dispatch(setSrcAudio(song?.data?.[128]));
     dispatch(

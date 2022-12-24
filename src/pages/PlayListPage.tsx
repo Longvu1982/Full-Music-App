@@ -48,14 +48,12 @@ const PlayListPage: React.FC = () => {
 	// scroll to active song
 	const scrollToActiveSong = (activeRef: any) => {
 		if (activeRef?.current) {
-			console.log(activeRef.current);
 			activeRef.current.scrollIntoView({
 				behavior: "smooth",
 				block: "nearest",
 				inline: "nearest",
 			});
-			console.log("fire scroll");
-		} else console.log("not exist");
+		} 
 	};
 	useEffect(() => {
 		scrollToActiveSong(activeRef);

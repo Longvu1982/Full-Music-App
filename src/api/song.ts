@@ -8,7 +8,6 @@ const getSong = async (id: string) => {
         }
       }
     )
-    console.log("data", data)
     return {err, msg, data}
   } catch(err) {
     console.log(err)

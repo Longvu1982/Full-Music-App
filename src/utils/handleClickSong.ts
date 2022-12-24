@@ -16,7 +16,6 @@ const useClickSong = () => {
 	const songId = useAppSelector((state) => state.audio.songId);
 	const setCurrentSong = useSetCurrentSong();
 	return async (encodeId: string, streamingStatus: number, songIdList: any, playingIndex: number, infoSong?: any) => {
-		console.log(infoSong);
 		if (songIdList && songIdList.length > 0) dispatch(setPlaylistSong(songIdList));
 		if (streamingStatus === 2) {
 			dispatch(setOpenToast(true));
@@ -27,8 +26,6 @@ const useClickSong = () => {
 				dispatch(setSongLoaded(false));
 
 				const song = await getSong(encodeId);
-				console.log("song", song);
-				console.log(encodeId);
 				if (song?.err !== 0) {
 					// alert(song?.msg)
 					dispatch(setSongLoaded(true));
@@ -38,7 +35,6 @@ const useClickSong = () => {
 				} else dispatch(setSongId(encodeId));
 				// const infoSong = await getInfoSong(encodeId);
 				// let infoSong
-				console.log("infoSong", infoSong);
 				setCurrentSong(song, infoSong, encodeId);
 				dispatch(changeIconPlay(true));
 				dispatch(setCurrnetIndexPlaylist(playingIndex));
