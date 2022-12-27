@@ -72,18 +72,20 @@ const LyricSection: React.FC = () => {
         <div className="relative max-w-full px-4">
           <div className="xl:w-[600px] w-[400px] py-[200px] relative scrollbar-hide overflow-y-auto max-w-full shrink-0 grow-0 h-[550px]">
             {lyric?.map((item: any, index: number) => {
+              const words: any[] | undefined = item?.words;
+              if (!words) return <></>;
               return (
                 <p
                   ref={
-                    item?.words?.[0].startTime <= currentTime &&
-                    item?.words?.at(-1).endTime >= currentTime
+                    words[0].startTime <= currentTime &&
+                    words[words.length - 1].endTime >= currentTime
                       ? lyricRef
                       : undefined
                   }
                   className=" mb-2 xl:mb-4 w-fit flex items-center h-16"
                   key={index}
                 >
-                  {item?.words?.map((wordItem: any, wordIndex: number) => {
+                  {words.map((wordItem: any, wordIndex: number) => {
                     return (
                       <span
                         key={wordIndex}
