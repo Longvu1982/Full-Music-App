@@ -140,7 +140,7 @@ const PlayListPage: React.FC = () => {
 					</div>
 
 					{/* render song lists */}
-					<div className="max-h-[calc(100vh_-_320px)]  mb-8 overflow-y-auto shadow-insetContainer">
+					<div className="max-h-[calc(100vh_-_320px)]  mb-8 overflow-y-auto overflow-x-hidden shadow-insetContainer">
 						{(isLoading ? Array.from(new Array(20)) : playLists?.song?.items)?.map((item: any, index: number) => {
 							return (
 								<div

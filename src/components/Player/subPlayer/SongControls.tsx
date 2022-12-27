@@ -55,7 +55,7 @@ const SongControls: React.FC = () => {
 	};
 
 	return (
-		<div className="flex items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center h-[104px]">
+		<div className="flex max-w-lg mx-auto xl:w-full items-center justify-between px-2 py-5 child-hover:cursor-pointer child-hover:bg-third child:rounded-full child:flex child:justify-center child:items-center h-[60px] xl:h-[104px]">
 			{/* shuffle button */}
 			<div onClick={handleShuffle} className="w-10 h-10">
 				<FontAwesomeIcon color={isShuffle ? "#1976d2" : ""} icon={faShuffle} className="" />

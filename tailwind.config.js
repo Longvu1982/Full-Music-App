@@ -24,7 +24,8 @@ module.exports = {
 			},
 		},
 		boxShadow: {
-			insetContainer: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)'
+			insetContainer: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+			normal: '0px 2px 10px 0 rgba(0, 0, 0, 0.36)'
 		}
 	},
 	plugins: [

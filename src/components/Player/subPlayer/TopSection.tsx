@@ -92,7 +92,7 @@ const TopSection = () => {
 	};
 
 	return (
-		<div className="flex justify-between items-center mb-6">
+		<div className="xl:flex hidden justify-between items-center mb-6">
 			{isShow && <MiniPlayList />}
 			<div className=" group w-9 h-9 cursor-pointer relative flex justify-center items-center hover:">
 				<div className="absolute w-full left-0 bottom-0 h-0 opacity-0 group-hover:h-32 opac group-hover:opacity-100 rounded-2xl bg-primary flex items-center justify-center overflow-hidden transition-all">

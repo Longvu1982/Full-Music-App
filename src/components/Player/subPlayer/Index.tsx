@@ -7,11 +7,11 @@ import SongControls from "./SongControls";
 const Controls: React.FC = (props) => {
 	
 	return (
-		<div className="py-6">
+		<div className="pb-6 xl:pt-6 pt-3">
 			<TopSection />
 			<TimeSection />
 			<SongControls />
-			<span className="select-none">128kbps</span>
+			<span className="hidden xl:block select-none ">128kbps</span>
 		</div>
 	);
 };

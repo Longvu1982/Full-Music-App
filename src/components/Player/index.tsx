@@ -63,8 +63,8 @@ const Player: React.FC = () => {
 	}, [dispatch, setCurrentSong]);
 
 	return (
-		<div className="fixed top-0 right-0 xl:flex flex-col justify-between text-center float-right text-light_title_color hidden w-80 h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
-			<Thumbnail />
+		<div className="fixed shadow-normal xl:top-0 right-0 bottom-0 flex flex-col justify-between text-center text-light_title_color w-full xl:w-80 h-auto xl:h-screen bg-secondary border-l-[0.5px] border-l-border_color px-4">
+			<div className="hidden xl:block"><Thumbnail /></div>
 			<Controls />
 		</div>
 	);

@@ -12,7 +12,7 @@ import {
 import useClickSong from "../../../utils/handleClickSong";
 
 const TimeSlider = styled(Slider)({
-	width: "180px",
+	width: "100%", 
 	height: 2,
 	"& .MuiSlider-track": {},
 	"& .MuiSlider-thumb": {
@@ -90,6 +90,7 @@ const TimeSection: React.FC = () => {
 		<div className="flex items-center justify-between">
 			<span className="w-10 shrink-0 grow-0 text-left">{formatTime(currentTime)}</span>
 			<TimeSlider
+			className="mx-2"
 				max={duration}
 				min={0}
 				value={currentTime}

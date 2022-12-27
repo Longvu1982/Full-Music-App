@@ -25,7 +25,7 @@
   inset: 0;
   pointer-events: none;
   user-select: none;
-  background: linear-gradient(0deg, var(--third-color), transparent, var(--third-color));
+  background: linear-gradient(0deg, var(--third-color), var(--transparent), var(--third-color));
 }
 
 p {
@@ -59,6 +59,7 @@ input[type="range"]::-moz-range-thumb {
   --lighter-text-color: #888a8b;
   --border-color: #abacad42;
   --third-color: #f0f0f0;
+  --transparent: #f0f0f000;
   --active-song: #e0e0e0;
 }
 
@@ -70,6 +71,7 @@ body.dark {
   --lighter-text-color: #636a72;
   --border-color: #636a7248;
   --third-color: #262f39;
+  --transparent: #262f3900;
   --active-song: #2f3944;
 }
 
